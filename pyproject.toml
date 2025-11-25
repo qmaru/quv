@@ -1,6 +1,6 @@
 [project]
 name = "quv"
-version = "0.0.1"
+version = "0.0.2"
 description = "my python tool list"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -17,5 +17,5 @@ build-backend = "hatchling.build"
 module = "quv"
 
 [project.scripts]
-ping = "quv.ping.main:cli"
+qping = "quv.ping.main:cli"
 tracker = "quv.tracker.main:cli"
