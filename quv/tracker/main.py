@@ -1,4 +1,5 @@
 import asyncio
+import os
 import sys
 from pathlib import Path
 
@@ -27,6 +28,19 @@ async def fast_get(client: httpx.AsyncClient, url: str) -> str | None:
         return None
 
 
+def parse_tracker(body: str) -> set[str]:
+    trackers: set[str] = set()
+    if not body:
+        return trackers
+    body = body.lstrip("\ufeff")
+    for line in body.splitlines():
+        s = line.strip()
+        if not s or s.startswith("#"):
+            continue
+        trackers.add(s)
+    return trackers
+
+
 async def get_tracker_list() -> list[str]:
     trackers: set[str] = set()
 
@@ -34,16 +48,11 @@ async def get_tracker_list() -> list[str]:
         tasks = [fast_get(client, url) for url in TRACKER_URLS]
         results = await asyncio.gather(*tasks)
 
-        trackers: set[str] = set()
         for body in results:
             if not body:
                 continue
+            trackers |= parse_tracker(body)
 
-            body_normalized = body.replace("\r\n\r\n", "\n").replace("\n\n", "\n")
-            for line in body_normalized.splitlines():
-                s = line.strip()
-                if s and not s.startswith("#"):
-                    trackers.add(s)
     trackers_sorted = sorted(trackers)
     return trackers_sorted
 
@@ -54,23 +63,41 @@ def save_to_file(trackers: list[str], filepath: Path) -> None:
         f.write(data)
 
 
+def get_folder() -> Path:
+    if len(sys.argv) < 2:
+        print("Error: missing required directory argument")
+        sys.exit(2)
+
+    root = Path(sys.argv[1]).expanduser().resolve()
+    if not root.exists():
+        print(f"Error: directory does not exist: {root}", file=sys.stderr)
+        sys.exit(2)
+
+    if not root.is_dir():
+        print(f"Error: path is not a directory: {root}", file=sys.stderr)
+        sys.exit(2)
+
+    if not os.access(root, os.W_OK):
+        print(f"Error: directory is not writable: {root}", file=sys.stderr)
+        sys.exit(2)
+
+    return root
+
+
 def cli():
     asyncio.run(main())
 
 
 async def main():
-    if len(sys.argv) < 2:
-        print("Error: missing required dir argument")
-        sys.exit(2)
-
-    work_dir = Path(sys.argv[1]).expanduser().resolve()
-    if not work_dir.exists():
-        print(f"Error: dir does not exist: {work_dir}", file=sys.stderr)
-        sys.exit(2)
-
+    work_dir = get_folder()
     track_output = work_dir / "tracker.txt"
-    trackers = await get_tracker_list()
-    save_to_file(trackers, track_output)
+    try:
+        trackers = await get_tracker_list()
+        save_to_file(trackers, track_output)
+        print(f"Tracker list saved to: {track_output}")
+    except Exception as err:
+        print(f"Error: {err}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
