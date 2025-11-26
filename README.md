@@ -11,7 +11,7 @@ uv tool install git+https://github.com/qmaru/quv.git
 ### Run
 
 ```shell
-uvx --from quv ping
+uvx --from quv qping
 # uv tool run --from quv qping
 ```
 
@@ -21,6 +21,6 @@ uvx --from quv ping
 
 > test tool
 
-+ tracker
++ qtracker
 
 > get bt trakcer list
