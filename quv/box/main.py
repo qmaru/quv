@@ -8,8 +8,8 @@ from quv.box.tabs.hello.hello import register as hello_register
 from quv.box.tabs.mdp.mdp import register as mdp_register
 
 TITLE = "quv Box"
-WIDTH = 700
-HEIGHT = 500
+WIDTH = 800
+HEIGHT = 600
 
 
 class QBox(tk.Tk):
@@ -18,7 +18,14 @@ class QBox(tk.Tk):
         init_styles(self)
 
         self.title(TITLE)
-        self.geometry(f"{WIDTH}x{HEIGHT}")
+        self.resizable(False, False)
+
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        x = (screen_width - WIDTH) // 2
+        y = (screen_height - HEIGHT) // 2
+        self.geometry(f"{WIDTH}x{HEIGHT}+{x}+{y}")
+
         self.logger = Logger(self)
 
         self._create_menu()
@@ -38,9 +45,9 @@ class QBox(tk.Tk):
 
     def _create_widgets(self):
         self.tab_control = ttk.Notebook(self)
-        self.tab_control.pack(side=tk.TOP, fill=tk.X, expand=False, pady=10)
+        self.tab_control.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-        self.logger.pack(side=tk.BOTTOM, fill=tk.X, expand=False)
+        self.logger.pack(side=tk.BOTTOM, fill=tk.X)
 
         self.tab_control.bind("<<NotebookTabChanged>>", self._on_tab_changed)
 
@@ -55,9 +62,12 @@ class QBox(tk.Tk):
             sel = self.tab_control.select()
             if sel:
                 widget = self.tab_control.nametowidget(sel)
-                h = widget.winfo_reqheight()
-                min_h = 40
-                self.tab_control.configure(height=max(h, min_h))
+                req_h = widget.winfo_reqheight()
+                logger_h = self.logger.winfo_reqheight()
+                pad = 32
+                new_h = req_h + logger_h + pad
+                cur_w = int(self.geometry().split("+")[0].split("x")[0])
+                self.geometry(f"{cur_w}x{new_h}")
         except Exception:
             pass
 

@@ -12,9 +12,9 @@ class Logger(ttk.Frame):
 
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
-        self.text.grid(row=0, column=0, sticky="nsew", padx=(4, 0), pady=0)
-        self.scrollbar.grid(row=0, column=1, sticky="ns", padx=(0, 4), pady=4)
-        self.text.config(state=tk.DISABLED)
+        self.text.grid(row=0, column=0, sticky="nsew", padx=(8, 0), pady=8)
+        self.scrollbar.grid(row=0, column=1, sticky="ns", padx=(0, 8), pady=8)
+        self.text.config(state=tk.DISABLED, padx=8, pady=8)
 
     def log(self, msg):
         self.text.config(state=tk.NORMAL)

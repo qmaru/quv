@@ -11,8 +11,10 @@ class HelloTab(ttk.Frame):
         self._create_widgets()
 
     def _create_widgets(self):
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1)
         btn = ttk.Button(self, text="Say Hello", command=self.say_hello)
-        btn.pack(side="top", anchor="w", padx=10, pady=10)
+        btn.grid(row=0, column=0, padx=10, pady=10)
 
     def say_hello(self):
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
