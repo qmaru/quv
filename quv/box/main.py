@@ -5,6 +5,7 @@ from quv.box.common.logger import Logger
 from quv.box.common.style import init_styles
 from quv.box.tabs.hasher.hasher import register as hasher_register
 from quv.box.tabs.hello.hello import register as hello_register
+from quv.box.tabs.mdp.mdp import register as mdp_register
 
 TITLE = "quv Box"
 WIDTH = 700
@@ -55,7 +56,6 @@ class QBox(tk.Tk):
             if sel:
                 widget = self.tab_control.nametowidget(sel)
                 h = widget.winfo_reqheight()
-                # 最低高度保底，防止过小
                 min_h = 40
                 self.tab_control.configure(height=max(h, min_h))
         except Exception:
@@ -65,6 +65,7 @@ class QBox(tk.Tk):
         tabs = [
             hello_register(self.tab_control, self.logger),
             hasher_register(self.tab_control, self.logger),
+            mdp_register(self.tab_control, self.logger),
         ]
 
         for tab_frame, tab_name in tabs:
