@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from quv.box.common.logger import Logger
+from quv.box.common.style import init_styles
 from quv.box.tabs.hasher.hasher import register as hasher_register
 from quv.box.tabs.hello.hello import register as hello_register
 
@@ -13,6 +14,8 @@ HEIGHT = 500
 class QBox(tk.Tk):
     def __init__(self):
         super().__init__()
+        init_styles(self)
+
         self.title(TITLE)
         self.geometry(f"{WIDTH}x{HEIGHT}")
         self.logger = Logger(self)

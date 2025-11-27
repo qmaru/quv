@@ -7,13 +7,14 @@ class Logger(ttk.Frame):
         super().__init__(parent, **kwargs)
 
         self.text = tk.Text(self, wrap=tk.WORD)
-        self.scrollbar = tk.Scrollbar(self, orient=tk.VERTICAL, command=self.text.yview)
+        self.scrollbar = ttk.Scrollbar(self, orient=tk.VERTICAL, command=self.text.yview)
         self.text.config(yscrollcommand=self.scrollbar.set)
-        self.text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         self.text.grid(row=0, column=0, sticky="nsew", padx=(4, 0), pady=0)
         self.scrollbar.grid(row=0, column=1, sticky="ns", padx=(0, 4), pady=4)
+        self.text.config(state=tk.DISABLED)
 
     def log(self, msg):
         self.text.config(state=tk.NORMAL)
