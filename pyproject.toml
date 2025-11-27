@@ -1,10 +1,13 @@
 [project]
 name = "quv"
-version = "0.0.5"
+version = "0.0.6"
 description = "my python tool list"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["httpx>=0.28.1"]
+dependencies = [
+    "blake3>=1.0.8",
+    "httpx>=0.28.1",
+]
 
 [project.urls]
 "Source" = "https://github.com/qmaru/quv.git"

@@ -1,5 +1,6 @@
-from tkinter import ttk
 from datetime import datetime
+from tkinter import ttk
+
 from quv.utils.catsay import catsay
 
 
@@ -11,7 +12,7 @@ class HelloTab(ttk.Frame):
 
     def _create_widgets(self):
         btn = ttk.Button(self, text="Say Hello", command=self.say_hello)
-        btn.pack(padx=10, pady=10)
+        btn.pack(side="top", anchor="w", padx=10, pady=10)
 
     def say_hello(self):
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
