@@ -1,12 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
 
+from quv.box.common.style import FONT_MAIN
+
 
 class Logger(ttk.Frame):
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
 
-        self.text = tk.Text(self, wrap=tk.WORD)
+        self.text = tk.Text(self, wrap=tk.WORD, font=FONT_MAIN)
         self.scrollbar = ttk.Scrollbar(self, orient=tk.VERTICAL, command=self.text.yview)
         self.text.config(yscrollcommand=self.scrollbar.set)
 
