@@ -1,6 +1,6 @@
 [project]
 name = "quv"
-version = "0.0.4"
+version = "0.0.5"
 description = "my python tool list"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -20,3 +20,4 @@ module = "quv"
 qping = "quv.ping.main:cli"
 qtracker = "quv.tracker.main:cli"
 qtmdb = "quv.tmdb.main:cli"
+qbox = "quv.box.main:cli"

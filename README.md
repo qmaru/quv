@@ -24,3 +24,11 @@ uvx --from quv qping
 + qtracker
 
 > get bt trakcer list
+
++ qtmdb
+
+> rename
+
++ qbox
+
+> gui demo via tk
