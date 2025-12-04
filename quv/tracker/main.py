@@ -37,6 +37,13 @@ def parse_tracker(body: str) -> set[str]:
         s = line.strip()
         if not s or s.startswith("#"):
             continue
+        s_lower = s.lower()
+        if not (
+            s_lower.startswith("tcp://")
+            or s_lower.startswith("http://")
+            or s_lower.startswith("https://")
+        ):
+            continue
         trackers.add(s)
     return trackers
 
