@@ -729,7 +729,7 @@ dependencies = [
 
 [[package]]
 name = "quv"
-version = "0.0.8"
+version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "aiofiles" },

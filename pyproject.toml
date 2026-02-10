@@ -1,15 +1,10 @@
 [project]
 name = "quv"
-version = "0.0.9"
+version = "0.1.0"
 description = "my python tool list"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
-    "aiofiles>=25.1.0",
-    "blake3>=1.0.8",
-    "httpx>=0.28.1",
-    "pymdp",
-]
+dependencies = ["aiofiles>=25.1.0", "blake3>=1.0.8", "httpx>=0.28.1", "pymdp"]
 
 [project.urls]
 "Source" = "https://github.com/qmaru/quv.git"
@@ -29,3 +24,4 @@ qping = "quv.ping.main:cli"
 qtracker = "quv.tracker.main:cli"
 qtmdb = "quv.tmdb.main:cli"
 qbox = "quv.box.main:cli"
+qrnd = "quv.random.main:cli"
