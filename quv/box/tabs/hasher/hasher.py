@@ -91,4 +91,4 @@ class HashTab(ttk.Frame):
 
 def register(parent, logger):
     tab = HashTab(parent, logger)
-    return tab, "Blake3"
+    return tab, "blake3"

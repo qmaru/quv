@@ -6,6 +6,7 @@ from quv.box.common.style import init_styles
 from quv.box.tabs.hasher.hasher import register as hasher_register
 from quv.box.tabs.hello.hello import register as hello_register
 from quv.box.tabs.mdp.mdp import register as mdp_register
+from quv.box.tabs.random.random import register as random_register
 
 TITLE = "quv Box"
 WIDTH = 800
@@ -74,6 +75,7 @@ class QBox(tk.Tk):
     def _register_tabs(self):
         tabs = [
             hello_register(self.tab_control, self.logger),
+            random_register(self.tab_control, self.logger),
             hasher_register(self.tab_control, self.logger),
             mdp_register(self.tab_control, self.logger),
         ]

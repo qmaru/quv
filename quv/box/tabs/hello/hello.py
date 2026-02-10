@@ -24,4 +24,4 @@ class HelloTab(ttk.Frame):
 
 def register(parent, logger):
     tab = HelloTab(parent, logger)
-    return tab, "Hello"
+    return tab, "hello"
