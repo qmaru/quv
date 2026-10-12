@@ -1,18 +1,19 @@
 import asyncio
+import contextlib
 import os
 import threading
 import time
 from pathlib import Path
-from tkinter import filedialog, ttk
+from tkinter import TclError, filedialog, ttk
 from urllib.parse import unquote, urlparse
 
 import aiofiles
-import httpx
-from pymdp.pymdp import MdprMedia
+import httpx2
+from pymdp import WebMdprMedia
 
 
 async def get_images(url: str) -> list[str]:
-    async with MdprMedia(url) as mdpr:
+    async with WebMdprMedia(url) as mdpr:
         image_index = await mdpr.get_image_index()
         return await mdpr.get_image_urls(image_index) if image_index else []
 
@@ -48,21 +49,17 @@ class MdpTab(ttk.Frame):
         self.download_btn.pack(side="left", padx=4)
 
     def _safe_log(self, msg: str, clear: bool = False):
-        try:
+        with contextlib.suppress(TclError):
             if clear:
                 self.logger.clear()
             self.logger.log(msg)
-        except Exception:
-            pass
 
     def _set_buttons(self, get_enabled: bool | None = None, download_enabled: bool | None = None):
-        try:
+        with contextlib.suppress(TclError):
             if get_enabled is not None:
                 self.get_btn.config(state="normal" if get_enabled else "disabled")
             if download_enabled is not None:
                 self.download_btn.config(state="normal" if download_enabled else "disabled")
-        except Exception:
-            pass
 
     def _on_get(self):
         url = self.input_entry.get().strip()
@@ -85,7 +82,7 @@ class MdpTab(ttk.Frame):
             data = "\n".join(image_urls) if image_urls else "No images found."
             data = f"{data}\n\nElapsed: {elapsed:.3f}s"
             self._image_urls = image_urls or []
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             elapsed = time.perf_counter() - start if "start" in locals() else 0.0
             data = f"Error: {e}\n\nElapsed: {elapsed:.3f}s"
             self._image_urls = []
@@ -113,7 +110,7 @@ class MdpTab(ttk.Frame):
     def _download_images_thread(self, folder: str):
         try:
             data = asyncio.run(self._download_images_async(folder))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             elapsed = 0.0
             data = f"Error: {e}\n\nElapsed: {elapsed:.3f}s"
 
@@ -132,7 +129,7 @@ class MdpTab(ttk.Frame):
 
         semaphore = asyncio.Semaphore(4)
 
-        async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
+        async with httpx2.AsyncClient(timeout=30.0, follow_redirects=True) as client:
 
             async def download_one(idx: int, img_url: str):
                 nonlocal successes, failures
@@ -166,18 +163,14 @@ class MdpTab(ttk.Frame):
                                         total_bytes += len(chunk)
 
                         msg = f"[{idx}/{total}] Saved: {dst} ({total_bytes} bytes)"
-                        try:
+                        with contextlib.suppress(TclError):
                             self.after(0, lambda m=msg: self.logger.log(m))
-                        except Exception:
-                            pass
                         successes += 1
                         return msg
-                    except Exception as e:
+                    except Exception as e:  # noqa: BLE001
                         msg = f"[{idx}/{total}] Failed: {img_url} -> {e}"
-                        try:
+                        with contextlib.suppress(TclError):
                             self.after(0, lambda m=msg: self.logger.log(m))
-                        except Exception:
-                            pass
                         failures += 1
                         return msg
 

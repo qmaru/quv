@@ -1,10 +1,10 @@
 [project]
 name = "quv"
-version = "0.1.0"
+version = "1.0.0"
 description = "my python tool list"
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = ["aiofiles>=25.1.0", "blake3>=1.0.8", "httpx>=0.28.1", "pymdp"]
+requires-python = ">=3.13"
+dependencies = ["aiofiles>=25.1.0", "blake3>=1.0.8", "httpx2>=2.13.1", "pymdp"]
 
 [project.urls]
 "Source" = "https://github.com/qmaru/quv.git"
@@ -18,6 +18,9 @@ module = "quv"
 
 [tool.uv.sources]
 pymdp = { git = "https://github.com/qmaru/pymdp.git" }
+
+[dependency-groups]
+dev = ["ruff>=0.17.0"]
 
 [project.scripts]
 qping = "quv.ping.main:cli"

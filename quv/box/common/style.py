@@ -1,3 +1,4 @@
+import contextlib
 import tkinter as tk
 from tkinter import ttk
 
@@ -9,11 +10,9 @@ def init_styles(root: tk.Tk | None = None) -> ttk.Style:
     style = ttk.Style(root) if root is not None else ttk.Style()
 
     for theme in ("vista", "clam", "alt", "default"):
-        try:
+        with contextlib.suppress(tk.TclError):
             style.theme_use(theme)
             break
-        except Exception:
-            continue
 
     style.configure(".", font=FONT_MAIN)
     style.configure("TLabel", font=FONT_MAIN)

@@ -3,53 +3,46 @@
 .
 aiofiles==25.1.0
     # via quv
-aiohappyeyeballs==2.6.1
-    # via aiohttp
-aiohttp==3.13.3
-    # via pymdp
-aiosignal==1.4.0
-    # via aiohttp
-anyio==4.12.1
-    # via httpx
-attrs==25.4.0
-    # via aiohttp
-blake3==1.0.8
+anyio==4.15.1 ; sys_platform != 'emscripten'
+    # via httpx2
+beautifulsoup4==4.15.0
+    # via types-lxml
+blake3==1.0.11
     # via quv
-certifi==2026.1.4
+cssselect==1.6.0
+    # via types-lxml
+h11==0.16.0 ; sys_platform != 'emscripten'
+    # via httpcore2
+httpcore2==2.13.1 ; sys_platform != 'emscripten'
+    # via httpx2
+httpx2==2.13.1
     # via
-    #   httpcore
-    #   httpx
-frozenlist==1.8.0
-    # via
-    #   aiohttp
-    #   aiosignal
-h11==0.16.0
-    # via httpcore
-httpcore==1.0.9
-    # via httpx
-httpx==0.28.1
-    # via quv
-idna==3.11
+    #   pymdp
+    #   quv
+httpx2-jsfetch==1.0 ; sys_platform == 'emscripten'
+    # via httpx2
+idna==3.20
     # via
     #   anyio
-    #   httpx
-    #   yarl
-lxml==6.0.2
+    #   httpx2
+lxml==6.1.3
     # via pymdp
-multidict==6.7.1
-    # via
-    #   aiohttp
-    #   yarl
-propcache==0.4.1
-    # via
-    #   aiohttp
-    #   yarl
-pymdp @ git+https://github.com/qmaru/pymdp.git@52320300bf2605b41068718bc93a800a69e7eb53
+pymdp @ git+https://github.com/qmaru/pymdp.git@e6f94beebe6268caf471bb25b149c459ba131b22
     # via quv
-typing-extensions==4.15.0 ; python_full_version < '3.13'
+soupsieve==3.0.1
+    # via beautifulsoup4
+truststore==0.10.4 ; sys_platform != 'emscripten'
     # via
-    #   aiosignal
+    #   httpcore2
+    #   httpx2
+types-html5lib==1.1.11.20260518
+    # via types-lxml
+types-lxml==2026.2.16
+    # via pymdp
+types-webencodings==0.6.0.20260907
+    # via types-html5lib
+typing-extensions==4.16.0
+    # via
     #   anyio
-    #   blake3
-yarl==1.22.0
-    # via aiohttp
+    #   beautifulsoup4
+    #   types-lxml

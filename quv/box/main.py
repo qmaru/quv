@@ -1,3 +1,4 @@
+import contextlib
 import tkinter as tk
 from tkinter import ttk
 
@@ -53,13 +54,11 @@ class QBox(tk.Tk):
         self.tab_control.bind("<<NotebookTabChanged>>", self._on_tab_changed)
 
     def _on_tab_changed(self, event):
-        try:
+        with contextlib.suppress(tk.TclError):
             self.logger.clear()
-        except Exception:
-            pass
 
         self.update_idletasks()
-        try:
+        with contextlib.suppress(tk.TclError, KeyError, ValueError):
             sel = self.tab_control.select()
             if sel:
                 widget = self.tab_control.nametowidget(sel)
@@ -69,8 +68,6 @@ class QBox(tk.Tk):
                 new_h = req_h + logger_h + pad
                 cur_w = int(self.geometry().split("+")[0].split("x")[0])
                 self.geometry(f"{cur_w}x{new_h}")
-        except Exception:
-            pass
 
     def _register_tabs(self):
         tabs = [

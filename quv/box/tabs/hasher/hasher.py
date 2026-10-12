@@ -1,6 +1,7 @@
+import contextlib
 import threading
 from pathlib import Path
-from tkinter import filedialog, ttk
+from tkinter import TclError, filedialog, ttk
 
 from blake3 import blake3
 
@@ -12,7 +13,7 @@ def hash_calc(data: str) -> str:
             data_bytes = p.read_bytes()
         else:
             data_bytes = str(data).encode("utf-8")
-    except Exception:
+    except Exception:  # noqa: BLE001
         data_bytes = str(data).encode("utf-8")
 
     hasher = blake3()
@@ -59,7 +60,7 @@ class HashTab(ttk.Frame):
             self.logger.clear()
             self.logger.log("Calculating hash, please wait...")
         except Exception:
-            pass
+            self.logger.exception("Error clearing logger")
 
         # 在后台线程中执行哈希计算
         thread = threading.Thread(target=self._calculate_hash, args=(value,), daemon=True)
@@ -69,7 +70,7 @@ class HashTab(ttk.Frame):
         try:
             digest = hash_calc(value)
             error_msg = None
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             digest = None
             error_msg = str(e)
 
@@ -77,13 +78,12 @@ class HashTab(ttk.Frame):
 
     def _update_result(self, value, digest, error_msg):
         try:
-            self.logger.clear()
-            if error_msg:
-                self.logger.log(f"----- INPUT -----\n{value}\n\n----- ERROR -----\n{error_msg}")
-            else:
-                self.logger.log(f"----- INPUT -----\n{value}\n\n----- HASH -----\n{digest}")
-        except Exception:
-            pass
+            with contextlib.suppress(TclError):
+                self.logger.clear()
+                if error_msg:
+                    self.logger.log(f"----- INPUT -----\n{value}\n\n----- ERROR -----\n{error_msg}")
+                else:
+                    self.logger.log(f"----- INPUT -----\n{value}\n\n----- HASH -----\n{digest}")
         finally:
             self.calculating = False
             self.calc_btn.config(state="normal")

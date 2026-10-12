@@ -3,7 +3,7 @@ import os
 import sys
 from pathlib import Path
 
-import httpx
+import httpx2
 
 TRACKER_URLS = [
     # https://github.com/ngosang/trackerslist
@@ -15,15 +15,15 @@ TRACKER_URLS = [
 ]
 
 
-async def fast_get(client: httpx.AsyncClient, url: str) -> str | None:
+async def fast_get(client: httpx2.AsyncClient, url: str) -> str | None:
     try:
         resp = await client.get(url)
         resp.raise_for_status()
         return resp.text
-    except httpx.HTTPError as err:
+    except httpx2.HTTPError as err:
         print(f"get tracker url error: {err} (url={url})")
         return None
-    except Exception as err:
+    except Exception as err:  # noqa: BLE001
         print(f"unexpected error fetching {url}: {err}")
         return None
 
@@ -38,11 +38,7 @@ def parse_tracker(body: str) -> set[str]:
         if not s or s.startswith("#"):
             continue
         s_lower = s.lower()
-        if not (
-            s_lower.startswith("tcp://")
-            or s_lower.startswith("http://")
-            or s_lower.startswith("https://")
-        ):
+        if not (s_lower.startswith(("tcp://", "http://", "https://"))):
             continue
         trackers.add(s)
     return trackers
@@ -51,7 +47,7 @@ def parse_tracker(body: str) -> set[str]:
 async def get_tracker_list() -> list[str]:
     trackers: set[str] = set()
 
-    async with httpx.AsyncClient(timeout=30) as client:
+    async with httpx2.AsyncClient(timeout=30) as client:
         tasks = [fast_get(client, url) for url in TRACKER_URLS]
         results = await asyncio.gather(*tasks)
 
@@ -102,7 +98,7 @@ async def main():
         trackers = await get_tracker_list()
         save_to_file(trackers, track_output)
         print(f"Tracker list saved to: {track_output}")
-    except Exception as err:
+    except Exception as err:  # noqa: BLE001
         print(f"Error: {err}")
         sys.exit(1)
 

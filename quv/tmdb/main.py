@@ -15,8 +15,8 @@ def read_config(config: Path):
         if parser.has_section("tmdb"):
             return {key.strip(): value.strip() for key, value in parser["tmdb"].items()}
         return None
-    except BaseException as e:
-        raise (e)
+    except Exception as e:
+        raise RuntimeError(f"Failed to read config: {e}") from e
 
 
 def parse_tmdb(tmdb_mapping: dict, files: list[Path]):
@@ -129,7 +129,7 @@ def main():
                 continue
             try:
                 os.rename(str(old), str(new))
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 print(f"Error renaming {old} -> {new}: {e}")
     else:
         args_parser.print_help()

@@ -1,4 +1,5 @@
 from tkinter import ttk
+
 from quv.random.main import generate_random
 
 
